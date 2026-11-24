@@ -1,0 +1,29 @@
+# Build results & output folders
+bin/
+obj/
+output/
+publish/
+out/
+
+# User-specific & IDE files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vs/
+.vscode/
+
+# Build logs & temporary files
+*.log
+*.tmp
+*.cache
+
+# Local binaries & media test files (ป้องกันเผลอ commit ไฟล์ใหญ่ขึ้น Git)
+ffmpeg.exe
+ffplay.exe
+ffprobe.exe
+*.mp4
+*.mp3
+*.wav
+*.m4a
+*.zip
