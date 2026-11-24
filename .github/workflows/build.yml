@@ -6,7 +6,10 @@ on:
     tags: [ 'v*' ]
   pull_request:
     branches: [ main, master ]
-  workflow_dispatch: # อนุญาตให้กดรัน Build เองได้จากหน้าเว็บ GitHub
+  workflow_dispatch:
+
+permissions:
+  contents: write # เพิ่มสิทธิ์ให้ GITHUB_TOKEN สามารถสร้าง Release และแนบไฟล์ได้
 
 jobs:
   build:
@@ -14,10 +17,10 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup .NET 8
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '8.0.x'
 
@@ -25,16 +28,15 @@ jobs:
         run: dotnet publish MakeVideoApp.csproj -c Release -r win-x64 --self-contained false -p:PublishSingleFile=true -o ./output
 
       - name: Upload MakeVideoApp.exe Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: MakeVideoApp-win-x64
           path: ./output/MakeVideoApp.exe
           if-no-files-found: error
 
-      # สร้างหน้า Release พร้อมแนบไฟล์ .exe อัตโนมัติเมื่อมีการ Push Tag (เช่น git tag v1.0.0 && git push --tags)
       - name: Create GitHub Release
         if: startsWith(github.ref, 'refs/tags/v')
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           files: ./output/MakeVideoApp.exe
           generate_release_notes: true
